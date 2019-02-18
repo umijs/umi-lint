@@ -1,0 +1,26 @@
+{
+  "name": "umi-lint",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "common-bin": "^2.8.1",
+    "eslint": "^5.14.0",
+    "globby": "^9.0.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^8.1.4",
+    "prettier": "^1.16.4",
+    "resolve-bin": "^0.4.0",
+    "stylelint": "^9.10.1",
+    "tslint": "^5.12.1"
+  },
+  "devDependencies": {
+    "umi-test": "^1.4.1"
+  }
+}
