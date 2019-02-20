@@ -21,48 +21,54 @@ class MainCommand extends Command {
     this.isTypescript = existsSync(join(cwd, 'tsconfig.json'));
     
     if(!staged) {
-      this.lint(context.argv);
+      yield this.lint(context.argv);
     } else {
-      this.lintStaged(context.argv);
+      yield this.lintStaged(context.argv);
     }
   }
 
-  * lint({ _, eslint, tslint, prettier, fix, quiet}) {
+  * lint({ _, eslint, tslint, stylelint, prettier, fix, quiet, cwd}) {
     if (_.length === 0) {
       console.log(`please specify a path to lint`);
       return;
     }
-
+    debugger;
     const commonOpts = [ ...fix ? ['--fix']: [], ...quiet ? ['--quiet']: []]
 
     const allFiles = getFiles(_);
-
-    if(eslint !== false) {
-      const files = allFiles.filter(item => endsWithArray(item, ['.js', '.jsx']));
-      if(files.length > 0) {
-        this.helper.forkNode(this.eslint, [...commonOpts, files]);
+    try {
+      // eslint can be disable
+      if(eslint !== false) {
+        // TODO, 效率可能不高, 先实现再验证
+        const files = allFiles.filter(item => endsWithArray(item, ['.js', '.jsx']));
+        if(files.length > 0) {
+          yield this.helper.forkNode(this.eslint, [...commonOpts, files], {cwd});
+        }
       }
-    }
 
-    if(tslint !== false && this.isTypescript) {
-      const files = allFiles.filter(item => endsWithArray(item, ['.ts', '.tsx']));
-      if(files.length > 0) {
-        this.helper.forkNode(this.tslint, [...commonOpts, files]);
+      if(tslint !== false && this.isTypescript) {
+        const files = allFiles.filter(item => endsWithArray(item, ['.ts', '.tsx']));
+        if(files.length > 0) {
+          yield this.helper.forkNode(this.tslint, [...commonOpts, files], {cwd});
+        }
       }
-    }
 
-    if(stylelint !== false) {
-      const files = allFiles.filter(item => endsWithArray(item, ['.css', '.less', '.sass', '.sass']));
-      if(files.length > 0) {
-        this.helper.forkNode(this.stylelint, [...commonOpts, files]);
+      if(stylelint !== false) {
+        const files = allFiles.filter(item => endsWithArray(item, ['.css', '.less', '.sass', '.sass']));
+        if(files.length > 0) {
+          yield this.helper.forkNode(this.stylelint, [...commonOpts, files], {cwd});
+        }
       }
-    }
 
-    if(prettier !== false) {
-      const files = allFiles.filter(item => endsWithArray(item, ['.js', '.jsx', '.ts', '.tsx', '.css', '.less', '.sass', '.sass']));
-      if(files.length > 0) {
-        this.helper.forkNode(this.prettier, [...commonOpts, '--write', files]);
+      if(prettier !== false) {
+        const files = allFiles.filter(item => endsWithArray(item, ['.js', '.jsx', '.ts', '.tsx', '.css', '.less', '.sass', '.sass']));
+        if(files.length > 0) {
+          yield this.helper.forkNode(this.prettier, [...commonOpts, '--write', files], {cwd});
+        }
       }
+    } catch(error) {
+      console.log(error);
+      process.exit(1);
     }
   }
 

@@ -21,6 +21,9 @@
     "tslint": "^5.12.1"
   },
   "devDependencies": {
+    "coffee": "^5.2.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "umi-test": "^1.4.1"
   }
 }
