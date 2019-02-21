@@ -2,7 +2,7 @@
   "name": "umi-lint",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "bin": "bin/umi-lint.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +24,7 @@
     "coffee": "^5.2.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "stylelint-config-recommended": "^2.1.0",
     "umi-test": "^1.4.1"
   }
 }
