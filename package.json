@@ -1,6 +1,6 @@
 {
   "name": "umi-lint",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "configless lint tool all in one",
   "bin": "bin/umi-lint.js",
   "scripts": {
