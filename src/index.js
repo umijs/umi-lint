@@ -3,23 +3,27 @@
 const Command = require("common-bin");
 const { sync: resolveBin } = require("resolve-bin");
 const { join } = require("path");
-const { writeFileSync, existsSync } = require("fs");
-const { endsWithArray, getFiles } = require("./utils");
+const { writeFileSync } = require("fs");
+const { endsWithArray, getFiles, parseSubOptions } = require("./utils");
+const debug = require('debug')('umi-lint');
 
 class MainCommand extends Command {
   constructor(rawArgv) {
     super(rawArgv);
+
     this.options = require("./options");
     this.eslint = resolveBin("eslint");
     this.tslint = resolveBin("tslint");
     this.stylelint = resolveBin("stylelint");
     this.prettier = resolveBin("prettier");
+
+    this.usage = 'Usage: umi-lint [options] file.js [file.js] [dir]';
+    this.usage = 'Usage: umi-lint --eslint.debug --stylelint.formatter=json src/';
   }
 
   *run(context) {
-    const { staged, cwd } = context.argv;
-    this.isTypescript = existsSync(join(cwd, "tsconfig.json"));
-
+    const { staged } = context.argv;
+    
     if (!staged) {
       yield this.lint(context.argv);
     } else {
@@ -32,13 +36,14 @@ class MainCommand extends Command {
       console.log(`please specify a path to lint`);
       return;
     }
-    debugger;
+
     const commonOpts = [
       ...(fix ? ["--fix"] : []),
       ...(quiet ? ["--quiet"] : [])
     ];
 
     const allFiles = getFiles(_);
+
     try {
       const jobs = [];
       // eslint can be disable
@@ -49,20 +54,20 @@ class MainCommand extends Command {
         );
         if (files.length > 0) {
           jobs.push(
-            this.helper.forkNode(this.eslint, [...commonOpts, ...files], {
+            this.helper.forkNode(this.eslint, [...commonOpts, ...parseSubOptions(eslint), ...files], {
               cwd
             })
           );
         }
       }
-
-      if (tslint !== false && this.isTypescript) {
+      
+      if (tslint !== false) {
         const files = allFiles.filter(item =>
           endsWithArray(item, [".ts", ".tsx"])
         );
         if (files.length > 0) {
           jobs.push(
-            this.helper.forkNode(this.tslint, [...commonOpts, ...files], {
+            this.helper.forkNode(this.tslint, [...commonOpts, ...parseSubOptions(tslint), ...files], {
               cwd
             })
           );
@@ -73,9 +78,10 @@ class MainCommand extends Command {
         const files = allFiles.filter(item =>
           endsWithArray(item, [".css", ".less", ".scss", ".sass"])
         );
+
         if (files.length > 0) {
           jobs.push(
-            this.helper.forkNode(this.stylelint, [...commonOpts, ...files], {
+            this.helper.forkNode(this.stylelint, [...commonOpts, ...parseSubOptions(stylelint), ...files], {
               cwd
             })
           );
@@ -99,7 +105,11 @@ class MainCommand extends Command {
           jobs.push(
             this.helper.forkNode(
               this.prettier,
-              [...commonOpts, "--write", ...files],
+              [ 
+                ...(process.env.FROM_TEST === "true" ? [] : ["--write"]),
+                ...parseSubOptions(prettier),
+                ...files
+              ],
               { cwd }
             )
           );
@@ -107,39 +117,43 @@ class MainCommand extends Command {
       }
       yield Promise.all(jobs);
     } catch (error) {
-      console.log(error);
-      process.exit(1);
+      debug(error);
+      process.exit(error.code);
     }
   }
 
-  *lintStaged({ prettier, eslint, tslint, fix, quiet }) {
-    const lintStaged = resolveBin("lintStaged");
-    // 根据参数动态生成配置
-
+  *lintStaged({ prettier, eslint, tslint, stylelint, fix, quiet }) {
+    const lintStaged = resolveBin("lint-staged");
     const commonOpts = `${fix ? "--fix" : ""} ${quiet ? "--quiet" : ""}`;
+    
+    // generate dynamic configuration
     const lintstagedrc = {
       ...(prettier && {
         "*.{js,jsx,ts,tsx,less,scss,sass,css}": [
-          `${this.prettier} --write`,
+          `${this.prettier} --write ${parseSubOptions(prettier).join(' ')}`,
           "git add"
         ]
       }),
       ...(eslint !== false && {
-        "*.{js,jsx}": [`${this.eslint} ${commonOpts}`, "git add"]
+        "*.{js,jsx}": [`${this.eslint} ${commonOpts} ${parseSubOptions(eslint).join(' ')}`, "git add"]
       }),
-      ...(tslint !== false &&
-        this.isTypescript && {
-          "*.{ts,tsx}": [`${this.tslint} ${commonOpts}`, "git add"]
+      ...(tslint !== false && {
+          "*.{ts,tsx}": [`${this.tslint} ${commonOpts} ${parseSubOptions(tslint).join(' ')}`, "git add"]
         }),
       ...(stylelint && {
-        "*.{less,scss,sass,css}": [`${this.stylelint} ${commonOpts}`, "git add"]
+        "*.{less,scss,sass,css}": [`${this.stylelint} ${commonOpts} ${parseSubOptions(stylelint).join(' ')}`, "git add"]
       })
     };
 
     const rcPath = join(__dirname, ".lintstagedrc.json");
     writeFileSync(rcPath, JSON.stringify(lintstagedrc));
 
-    yield this.helper.forkNode(lintStaged, ["-c", rcPath]);
+    try {
+      yield this.helper.forkNode(lintStaged, ["-c", rcPath]);
+    } catch (error) {
+      debug(error);
+      process.exit(error.code);
+    }
   }
 }
 

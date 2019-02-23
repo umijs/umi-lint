@@ -1,16 +1,23 @@
 {
   "name": "umi-lint",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0-alpha.1",
+  "description": "configless lint tool all in one",
   "bin": "bin/umi-lint.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "umi-test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:umijs/umi-lint.git"
+  },
+  "keywords": ["lint", "eslint", "stylelint", "prettier", "lint-staged", "husky", "tslint"],
+  "author": {
+    "name": "clock157",
+    "email": "clock157@163.com"
+  },
+  "license": "MIT",
   "dependencies": {
-    "common-bin": "^2.8.1",
+    "common-bin": "2.8.1",
     "eslint": "^5.14.0",
     "globby": "^9.0.0",
     "husky": "^0.14.3",
@@ -18,7 +25,8 @@
     "prettier": "^1.16.4",
     "resolve-bin": "^0.4.0",
     "stylelint": "^9.10.1",
-    "tslint": "^5.12.1"
+    "tslint": "^5.12.1",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "coffee": "^5.2.1",
@@ -26,5 +34,8 @@
     "eslint-plugin-import": "^2.16.0",
     "stylelint-config-recommended": "^2.1.0",
     "umi-test": "^1.4.1"
+  },
+  "yargs": {
+    "camel-case-expansion": false
   }
 }
