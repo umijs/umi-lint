@@ -1,16 +1,26 @@
 {
   "name": "umi-lint",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "configless lint tool all in one",
   "bin": "bin/umi-lint.js",
   "scripts": {
+    "lint": "umi-lint bin/ src/",
+    "precommit": "umi-lint --staged --prettier --lintstyle --fix",
     "test": "umi-test"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:umijs/umi-lint.git"
   },
-  "keywords": ["lint", "eslint", "stylelint", "prettier", "lint-staged", "husky", "tslint"],
+  "keywords": [
+    "lint",
+    "eslint",
+    "stylelint",
+    "prettier",
+    "lint-staged",
+    "husky",
+    "tslint"
+  ],
   "author": {
     "name": "clock157",
     "email": "clock157@163.com"
@@ -31,8 +41,10 @@
   "devDependencies": {
     "coffee": "^5.2.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
+    "eslint-config-egg": "^7.1.0",
+    "eslint-config-prettier": "^4.0.0",
     "stylelint-config-recommended": "^2.1.0",
+    "umi-lint": "file:./",
     "umi-test": "^1.4.1"
   },
   "yargs": {

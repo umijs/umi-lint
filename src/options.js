@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   staged: {
     description: "only lint git staged files",
@@ -15,7 +17,7 @@ module.exports = {
     description: "enabel lint javascript",
     boolean: true,
     default: true,
-    alias: "e",
+    alias: "e"
   },
   tslint: {
     description: "enable lint typescript",
