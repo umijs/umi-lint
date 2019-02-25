@@ -26,13 +26,22 @@ npm install umi-lint --save-dev
 ## 参数说明
 
 ```bash
+
 Usage: umi-lint [options] file.js [file.js] [dir]
-Usage: umi-lint --eslint.debug --prettier --stylelint.formatter=json src/
+
+# 对指定路径 lint
+umi-lint --prettier --stylelint src/
+
+# 只对提交的代码进行 lint
+umi-lint --staged --prettier --stylelint
+
+# 对于某些场景需要指定 lint 工具的子参数
+umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi
 
 Options:
 --staged, -S              only lint git staged files                          [boolean] [default: false]
 --prettier, -p            format code with prettier                           [boolean] [default: false]
---eslint, -e              enabel lint javascript                              [boolean] [default: true]
+--eslint, -e              enable lint javascript                              [boolean] [default: true]
 --tslint, -t              enable lint typescript                              [boolean] [default: true]
 --stylelint, --style, -s  enable lint style                                   [boolean] [default: false]
 --fix, -f                 fix all eslint and stylelint auto-fixable problems  [boolean] [default: false]
