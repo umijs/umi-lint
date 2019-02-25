@@ -1,50 +1,50 @@
-"use strict";
+'use strict';
 
 module.exports = {
   staged: {
-    description: "only lint git staged files",
+    description: 'only lint git staged files',
     boolean: true,
     default: false,
-    alias: "S"
+    alias: 'S',
   },
   prettier: {
-    description: "format code with prettier",
+    description: 'format code with prettier',
     boolean: true,
     default: false,
-    alias: "p"
+    alias: 'p',
   },
   eslint: {
-    description: "enabel lint javascript",
+    description: 'enabel lint javascript',
     boolean: true,
     default: true,
-    alias: "e"
+    alias: 'e',
   },
   tslint: {
-    description: "enable lint typescript",
+    description: 'enable lint typescript',
     boolean: true,
     default: true,
-    alias: "t"
+    alias: 't',
   },
   stylelint: {
-    description: "enable lint style",
+    description: 'enable lint style',
     boolean: true,
     default: false,
-    alias: ["style", "s"]
+    alias: ['style', 's'],
   },
   fix: {
-    description: "fix all eslint and stylelint auto-fixable problems",
+    description: 'fix all eslint and stylelint auto-fixable problems',
     boolean: true,
     default: false,
-    alias: "f"
+    alias: 'f',
   },
   quiet: {
-    description: "report errors only",
+    description: 'report errors only',
     boolean: true,
     default: false,
-    alias: "q"
+    alias: 'q',
   },
   cwd: {
-    description: "current working directory",
-    default: process.cwd()
-  }
+    description: 'current working directory',
+    default: process.cwd(),
+  },
 };

@@ -1,11 +1,11 @@
 {
   "name": "umi-lint",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-beta.1",
   "description": "configless lint tool all in one",
   "bin": "bin/umi-lint.js",
   "scripts": {
     "lint": "umi-lint bin/ src/",
-    "precommit": "umi-lint --staged --prettier --lintstyle --fix",
+    "precommit": "umi-lint --staged --prettier --fix",
     "test": "umi-test"
   },
   "repository": {

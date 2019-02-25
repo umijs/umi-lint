@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
-const globby = require("globby");
+const globby = require('globby');
 
 function transformOpts(result, item, key) {
   result.push(`--${key}`);
-  if (typeof item[key] !== "boolean") {
+  if (typeof item[key] !== 'boolean') {
     result.push(item[key]);
   }
 }
@@ -12,14 +12,14 @@ function transformOpts(result, item, key) {
 module.exports = {
   endsWithArray: (str, arr) => {
     // like /.js$|.jsx$/.test('aaa.js')
-    return new RegExp(`${arr.join("$|")}$`).test(str);
+    return new RegExp(`${arr.join('$|')}$`).test(str);
   },
   getFiles: patterns => {
     return globby.sync(patterns, {
       gitignore: true,
-      ignore: ["**/node_modules/**", ".git"],
+      ignore: ['**/node_modules/**', '.git'],
       onlyFiles: true,
-      dot: true
+      dot: true,
     });
   },
   /**
@@ -30,13 +30,13 @@ module.exports = {
   parseSubOptions: option => {
     if (Array.isArray(option)) {
       return option
-        .filter(item => typeof item === "object")
+        .filter(item => typeof item === 'object')
         .reduce((result, item) => {
           const key = Object.keys(item)[0];
           transformOpts(result, item, key);
           return result;
         }, []);
-    } else if (typeof option === "object") {
+    } else if (typeof option === 'object') {
       const result = [];
       Object.keys(option).forEach(key => {
         transformOpts(result, option, key);
@@ -44,5 +44,5 @@ module.exports = {
       return result;
     }
     return [];
-  }
+  },
 };

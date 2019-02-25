@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-"use strict";
+'use strict';
 
-const Command = require("../src");
+const Command = require('../src');
 new Command().start();
