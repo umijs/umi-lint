@@ -17,8 +17,13 @@ class MainCommand extends Command {
     this.stylelint = resolveBin('stylelint');
     this.prettier = resolveBin('prettier');
 
-    this.usage = 'Usage: umi-lint [options] file.js [file.js] [dir]';
-    this.usage = 'Usage: umi-lint --eslint.debug --stylelint.formatter=json src/';
+    this.usage = `
+Usage: umi-lint [options] file.js [file.js] [dir]
+  
+  umi-lint --prettier --stylelint src/
+  umi-lint --staged --prettier --stylelint
+  umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi src/ test/
+    `;
   }
 
   *run(context) {
@@ -118,7 +123,7 @@ class MainCommand extends Command {
     }
   }
 
-  *lintStaged({ prettier, eslint, tslint, stylelint, fix, quiet }) {
+  *lintStaged({ prettier, eslint, tslint, stylelint, fix, quiet, cwd }) {
     const lintStaged = resolveBin('lint-staged');
     const commonOpts = `${fix ? '--fix' : ''} ${quiet ? '--quiet' : ''}`;
 
@@ -126,25 +131,19 @@ class MainCommand extends Command {
     const lintstagedrc = {
       ...(prettier && {
         '*.{js,jsx,ts,tsx,less,scss,sass,css}': [
-          `${this.prettier} --write ${parseSubOptions(prettier).join(' ')}`,
+          `prettier --write ${parseSubOptions(prettier).join(' ')}`,
           'git add',
         ],
       }),
       ...(eslint !== false && {
-        '*.{js,jsx}': [
-          `${this.eslint} ${commonOpts} ${parseSubOptions(eslint).join(' ')}`,
-          'git add',
-        ],
+        '*.{js,jsx}': [`eslint ${commonOpts} ${parseSubOptions(eslint).join(' ')}`, 'git add'],
       }),
       ...(tslint !== false && {
-        '*.{ts,tsx}': [
-          `${this.tslint} ${commonOpts} ${parseSubOptions(tslint).join(' ')}`,
-          'git add',
-        ],
+        '*.{ts,tsx}': [`tslint ${commonOpts} ${parseSubOptions(tslint).join(' ')}`, 'git add'],
       }),
       ...(stylelint && {
         '*.{less,scss,sass,css}': [
-          `${this.stylelint} ${commonOpts} ${parseSubOptions(stylelint).join(' ')}`,
+          `stylelint ${commonOpts} ${parseSubOptions(stylelint).join(' ')}`,
           'git add',
         ],
       }),
@@ -154,7 +153,7 @@ class MainCommand extends Command {
     writeFileSync(rcPath, JSON.stringify(lintstagedrc));
 
     try {
-      yield this.helper.forkNode(lintStaged, ['-c', rcPath]);
+      yield this.helper.forkNode(lintStaged, ['-c', rcPath], { cwd });
     } catch (error) {
       debug(error);
       process.exit(error.code);
