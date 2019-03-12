@@ -4,8 +4,8 @@
   "description": "configless lint tool all in one",
   "bin": "bin/umi-lint.js",
   "scripts": {
-    "lint": "umi-lint bin/ src/",
-    "precommit": "umi-lint --staged --prettier --fix",
+    "lint": "umi-lint --eslint bin/ src/",
+    "precommit": "umi-lint --staged --eslint --prettier --fix",
     "test": "umi-test"
   },
   "repository": {
@@ -39,6 +39,8 @@
     "tslint": "^5.12.1"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
+    "@typescript-eslint/parser": "^1.4.2",
     "coffee": "^5.2.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-egg": "^7.1.0",
