@@ -4,7 +4,7 @@ const Command = require('common-bin');
 const { sync: resolveBin } = require('resolve-bin');
 const { join } = require('path');
 const { writeFileSync } = require('fs');
-const { endsWithArray, getFiles, parseSubOptions } = require('./utils');
+const { endsWithArray, getFiles, parseSubOptions, getEslintExtensions } = require('./utils');
 const debug = require('debug')('umi-lint');
 
 class MainCommand extends Command {
@@ -49,9 +49,11 @@ Usage: umi-lint [options] file.js [file.js] [dir]
     try {
       const jobs = [];
       // eslint can be disable
-      if (eslint !== false) {
+      if (eslint) {
+        const eslintOptions = parseSubOptions(eslint);
+        const eslintExtensions = getEslintExtensions(eslintOptions);
         // TODO, 效率可能不高, 先实现再验证
-        const files = allFiles.filter(item => endsWithArray(item, ['.js', '.jsx']));
+        const files = allFiles.filter(item => endsWithArray(item, eslintExtensions));
         if (files.length > 0) {
           jobs.push(
             this.helper.forkNode(
@@ -65,7 +67,7 @@ Usage: umi-lint [options] file.js [file.js] [dir]
         }
       }
 
-      if (tslint !== false) {
+      if (tslint) {
         const files = allFiles.filter(item => endsWithArray(item, ['.ts', '.tsx']));
         if (files.length > 0) {
           jobs.push(
@@ -127,6 +129,9 @@ Usage: umi-lint [options] file.js [file.js] [dir]
     const lintStaged = resolveBin('lint-staged');
     const commonOpts = `${fix ? '--fix' : ''} ${quiet ? '--quiet' : ''}`;
 
+    const eslintOptions = parseSubOptions(eslint);
+    const eslintExtensions = getEslintExtensions(eslintOptions);
+
     // generate dynamic configuration
     const lintstagedrc = {
       ...(prettier && {
@@ -135,10 +140,13 @@ Usage: umi-lint [options] file.js [file.js] [dir]
           'git add',
         ],
       }),
-      ...(eslint !== false && {
-        '*.{js,jsx}': [`eslint ${commonOpts} ${parseSubOptions(eslint).join(' ')}`, 'git add'],
+      ...(eslint && {
+        [`*.{${eslintExtensions.join(',')}}`]: [
+          `eslint ${commonOpts} ${parseSubOptions(eslint).join(' ')}`,
+          'git add',
+        ],
       }),
-      ...(tslint !== false && {
+      ...(tslint && {
         '*.{ts,tsx}': [`tslint ${commonOpts} ${parseSubOptions(tslint).join(' ')}`, 'git add'],
       }),
       ...(stylelint && {

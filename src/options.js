@@ -16,13 +16,13 @@ module.exports = {
   eslint: {
     description: 'enabel lint javascript',
     boolean: true,
-    default: true,
+    default: false,
     alias: 'e',
   },
   tslint: {
     description: 'enable lint typescript',
     boolean: true,
-    default: true,
+    default: false,
     alias: 't',
   },
   stylelint: {

@@ -18,8 +18,8 @@ npm install umi-lint --save-dev
 
 ```diff
 "scripts": {
-+   "lint": "umi-lint src/",
-+   "precommit": "umi-lint --staged --stylelint --prettier --fix",
++   "lint": "umi-lint --eslint src/",
++   "precommit": "umi-lint --staged --eslint --stylelint --prettier --fix",
 }
 ```
 
@@ -30,10 +30,10 @@ npm install umi-lint --save-dev
 Usage: umi-lint [options] file.js [file.js] [dir]
 
 # 对指定路径 lint
-umi-lint --prettier --stylelint src/
+umi-lint --prettier --eslint --stylelint src/
 
 # 只对提交的代码进行 lint
-umi-lint --staged --prettier --stylelint
+umi-lint --staged --prettier --eslint --stylelint
 
 # 对于某些场景需要指定 lint 工具的子参数
 umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi
@@ -41,8 +41,8 @@ umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi
 Options:
 --staged, -S              only lint git staged files                          [boolean] [default: false]
 --prettier, -p            format code with prettier                           [boolean] [default: false]
---eslint, -e              enable lint javascript                              [boolean] [default: true]
---tslint, -t              enable lint typescript                              [boolean] [default: true]
+--eslint, -e              enable lint javascript                              [boolean] [default: false]
+--tslint, -t              enable lint typescript                              [boolean] [default: false]
 --stylelint, --style, -s  enable lint style                                   [boolean] [default: false]
 --fix, -f                 fix all eslint and stylelint auto-fixable problems  [boolean] [default: false]
 --quiet, -q               report errors only                                  [boolean] [default: false]
@@ -50,5 +50,17 @@ Options:
 ```
 
 ## 问题解决
+
+### 常见问题
+
+#### Q: 没有配置文件
+
+A: `umi-lint` 不包含配置，需要根据需求自己配置 `.eslintrc`、`.stylelintrc`、`.prettierrc`
+
+#### Q: 使用 eslint 来检查 typescript
+
+A: `umi-lint --eslint.ext='.tx,tsx'`，
+
+### 钉钉群
 
 <img src="https://gw.alipayobjects.com/zos/rmsportal/jPXcQOlGLnylGMfrKdBz.jpg" width="60" />

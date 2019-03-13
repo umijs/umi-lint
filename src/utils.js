@@ -45,4 +45,11 @@ module.exports = {
     }
     return [];
   },
+  getEslintExtensions: options => {
+    const index = options.indexOf('--ext');
+    if (index !== -1) {
+      return options[index + 1].split(',');
+    }
+    return ['.js', '.jsx'];
+  },
 };
