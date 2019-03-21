@@ -141,7 +141,7 @@ Usage: umi-lint [options] file.js [file.js] [dir]
         ],
       }),
       ...(eslint && {
-        [`*.{${eslintExtensions.join(',')}}`]: [
+        [`*{${eslintExtensions.join(',')}}`]: [
           `eslint ${commonOpts} ${parseSubOptions(eslint).join(' ')}`,
           'git add',
         ],
