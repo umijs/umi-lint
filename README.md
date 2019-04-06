@@ -55,7 +55,7 @@ Options:
 
 #### Q: 没有配置文件
 
-A: `umi-lint` 不包含配置，需要根据需求自己配置 `.eslintrc`、`.stylelintrc`、`.prettierrc`
+A: `umi-lint` 不包含配置，需要根据需求自己配置 `.eslintrc`、`.stylelintrc`、`.prettierrc`
 
 #### Q: 使用 eslint 来检查 typescript
 
