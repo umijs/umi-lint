@@ -22,7 +22,7 @@ function getIgnores(cwd) {
       ignore: ignores,
       cwd,
     })
-    .foreach(file => {
+    .forEach(file => {
       const result = fs
         .readFileSync(file, 'utf8')
         .split(/\r?\n/)
