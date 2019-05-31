@@ -44,7 +44,7 @@ Usage: umi-lint [options] file.js [file.js] [dir]
 
     const commonOpts = [...(fix ? ['--fix'] : []), ...(quiet ? ['--quiet'] : [])];
 
-    const allFiles = getFiles(_);
+    const allFiles = getFiles(_, cwd);
 
     try {
       const jobs = [];
