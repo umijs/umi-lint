@@ -1,6 +1,7 @@
 'use strict';
 
 const globby = require('globby');
+const fs = require('fs');
 
 function transformOpts(result, item, key) {
   result.push(`--${key}`);
@@ -9,15 +10,38 @@ function transformOpts(result, item, key) {
   }
 }
 
+/**
+ * 获取忽略文件
+ * @param cwd 当前目录
+ */
+function getIgnores(cwd) {
+  let ignores = ['**/node_modules/**', '.git'];
+  // 获取 eslintignore 忽略规则
+  globby
+    .sync('**/.eslintignore', {
+      ignore: ignores,
+      cwd,
+    })
+    .foreach(file => {
+      const result = fs
+        .readFileSync(file, 'utf8')
+        .split(/\r?\n/)
+        .filter(Boolean)
+        .filter(line => line.charAt(0) !== '#');
+      ignores = ignores.concat(result);
+    });
+  return ignores;
+}
+
 module.exports = {
   endsWithArray: (str, arr) => {
     // like /.js$|.jsx$/.test('aaa.js')
     return new RegExp(`${arr.join('$|')}$`).test(str);
   },
-  getFiles: patterns => {
+  getFiles: (patterns, cwd) => {
     return globby.sync(patterns, {
       gitignore: true,
-      ignore: ['**/node_modules/**', '.git'],
+      ignore: getIgnores(cwd),
       onlyFiles: true,
       dot: true,
     });
