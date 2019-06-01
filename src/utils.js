@@ -2,6 +2,7 @@
 
 const globby = require('globby');
 const fs = require('fs');
+const ignore = require('ignore');
 
 function transformOpts(result, item, key) {
   result.push(`--${key}`);
@@ -11,7 +12,7 @@ function transformOpts(result, item, key) {
 }
 
 /**
- * 获取忽略文件
+ * 获取其他需要忽略的规则
  * @param cwd 当前目录
  */
 function getIgnores(cwd) {
@@ -39,12 +40,16 @@ module.exports = {
     return new RegExp(`${arr.join('$|')}$`).test(str);
   },
   getFiles: (patterns, cwd) => {
-    return globby.sync(patterns, {
+    const result = globby.sync(patterns, {
       gitignore: true,
-      ignore: getIgnores(cwd),
+      ignore: ['**/node_modules/**', '.git'],
       onlyFiles: true,
       dot: true,
     });
+
+    return ignore()
+      .add(getIgnores(cwd))
+      .filter(result);
   },
   /**
    * support sub option like: --eslint.debug --eslint.no-ignore
