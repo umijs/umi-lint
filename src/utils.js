@@ -3,6 +3,7 @@
 const globby = require('globby');
 const fs = require('fs');
 const ignore = require('ignore');
+const path = require('path');
 
 function transformOpts(result, item, key) {
   result.push(`--${key}`);
@@ -40,12 +41,17 @@ module.exports = {
     return new RegExp(`${arr.join('$|')}$`).test(str);
   },
   getFiles: (patterns, cwd) => {
-    const result = globby.sync(patterns, {
-      gitignore: true,
-      ignore: ['**/node_modules/**', '.git'],
-      onlyFiles: true,
-      dot: true,
-    });
+    const result = globby
+      .sync(patterns, {
+        gitignore: true,
+        ignore: ['**/node_modules/**', '.git'],
+        onlyFiles: true,
+        dot: true,
+      })
+      .map(item => {
+        // ignore 包必须使用相对路径
+        return path.relative(cwd, item);
+      });
 
     return ignore()
       .add(getIgnores(cwd))
