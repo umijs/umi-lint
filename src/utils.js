@@ -16,11 +16,11 @@ function transformOpts(result, item, key) {
  * @param cwd 当前目录
  */
 function getIgnores(cwd) {
-  let ignores = ['**/node_modules/**', '.git'];
+  let ignores = [];
   // 获取 eslintignore 忽略规则
   globby
     .sync('**/.eslintignore', {
-      ignore: ignores,
+      ignore: ['**/node_modules/**'],
       cwd,
     })
     .forEach(file => {
