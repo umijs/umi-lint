@@ -26,6 +26,8 @@
     "test": "umi-test"
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
+    "@typescript-eslint/parser": "^1.4.2",
     "common-bin": "2.8.1",
     "debug": "^4.1.1",
     "eslint": "^5.16.0",
@@ -61,8 +63,6 @@
     "stylelint-order": "^3.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^1.4.2",
-    "@typescript-eslint/parser": "^1.4.2",
     "coffee": "^5.2.1",
     "umi-test": "^1.4.1"
   },
