@@ -13,16 +13,14 @@ class MainCommand extends Command {
 
     this.options = require('./options');
     this.eslint = resolveBin('eslint');
-    this.tslint = resolveBin('tslint');
     this.stylelint = resolveBin('stylelint');
     this.prettier = resolveBin('prettier');
 
     this.usage = `
-Usage: umi-lint [options] file.js [file.js] [dir]
-  
-  umi-lint --prettier --stylelint src/
-  umi-lint --staged --prettier --stylelint
-  umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi src/ test/
+      Usage: umi-lint [options] file.js [file.js] [dir]
+        umi-lint --prettier --stylelint src/
+        umi-lint --staged --prettier --stylelint
+        umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi src/ test/
     `;
   }
 
@@ -36,7 +34,7 @@ Usage: umi-lint [options] file.js [file.js] [dir]
     }
   }
 
-  *lint({ _, eslint, tslint, stylelint, prettier, fix, quiet, cwd }) {
+  *lint({ _, eslint, stylelint, prettier, fix, quiet, cwd }) {
     if (_.length === 0) {
       console.log('please specify a path to lint');
       return;
@@ -61,30 +59,15 @@ Usage: umi-lint [options] file.js [file.js] [dir]
               [...commonOpts, ...parseSubOptions(eslint), ...files],
               {
                 cwd,
-              }
-            )
-          );
-        }
-      }
-
-      if (tslint) {
-        const files = allFiles.filter(item => endsWithArray(item, ['.ts', '.tsx']));
-        if (files.length > 0) {
-          jobs.push(
-            this.helper.forkNode(
-              this.tslint,
-              [...commonOpts, ...parseSubOptions(tslint), ...files],
-              {
-                cwd,
-              }
-            )
+              },
+            ),
           );
         }
       }
 
       if (stylelint) {
         const files = allFiles.filter(item =>
-          endsWithArray(item, ['.css', '.less', '.scss', '.sass'])
+          endsWithArray(item, ['.css', '.less', '.scss', '.sass']),
         );
 
         if (files.length > 0) {
@@ -94,15 +77,15 @@ Usage: umi-lint [options] file.js [file.js] [dir]
               [...commonOpts, ...parseSubOptions(stylelint), ...files],
               {
                 cwd,
-              }
-            )
+              },
+            ),
           );
         }
       }
 
       if (prettier) {
         const files = allFiles.filter(item =>
-          endsWithArray(item, ['.js', '.jsx', '.ts', '.tsx', '.css', '.less', '.scss', '.sass'])
+          endsWithArray(item, ['.js', '.jsx', '.ts', '.tsx', '.css', '.less', '.scss', '.sass']),
         );
         if (files.length > 0) {
           jobs.push(
@@ -113,8 +96,8 @@ Usage: umi-lint [options] file.js [file.js] [dir]
                 ...parseSubOptions(prettier),
                 ...files,
               ],
-              { cwd }
-            )
+              { cwd },
+            ),
           );
         }
       }
@@ -125,7 +108,7 @@ Usage: umi-lint [options] file.js [file.js] [dir]
     }
   }
 
-  *lintStaged({ prettier, eslint, tslint, stylelint, fix, quiet, cwd }) {
+  *lintStaged({ prettier, eslint, stylelint, fix, quiet, cwd }) {
     const lintStaged = resolveBin('lint-staged');
     const commonOpts = `${fix ? '--fix' : ''} ${quiet ? '--quiet' : ''}`;
 
@@ -145,9 +128,6 @@ Usage: umi-lint [options] file.js [file.js] [dir]
           `eslint ${commonOpts} ${parseSubOptions(eslint).join(' ')}`,
           'git add',
         ],
-      }),
-      ...(tslint && {
-        '*.{ts,tsx}': [`tslint ${commonOpts} ${parseSubOptions(tslint).join(' ')}`, 'git add'],
       }),
       ...(stylelint && {
         '*.{less,scss,sass,css}': [

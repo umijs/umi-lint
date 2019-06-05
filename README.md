@@ -1,6 +1,6 @@
 # umi-lint
 
-代码质量检查和美化工具，封装了 eslint，tslint，stylelint，prettier，lint-staged，husky等，无门槛使用。
+代码质量检查和美化工具，封装了 eslint，tslint，stylelint，prettier，lint-staged，husky 等，无门槛使用。
 
 ## 为什么
 
@@ -36,13 +36,12 @@ umi-lint --prettier --eslint --stylelint src/
 umi-lint --staged --prettier --eslint --stylelint
 
 # 对于某些场景需要指定 lint 工具的子参数
-umi-lint --eslint.debug --tslint.force -s.formatter=json -p.no-semi
+umi-lint --eslint.debug  -s.formatter=json -p.no-semi
 
 Options:
 --staged, -S              only lint git staged files                          [boolean] [default: false]
 --prettier, -p            format code with prettier                           [boolean] [default: false]
 --eslint, -e              enable lint javascript                              [boolean] [default: false]
---tslint, -t              enable lint typescript                              [boolean] [default: false]
 --stylelint, --style, -s  enable lint style                                   [boolean] [default: false]
 --fix, -f                 fix all eslint and stylelint auto-fixable problems  [boolean] [default: false]
 --quiet, -q               report errors only                                  [boolean] [default: false]

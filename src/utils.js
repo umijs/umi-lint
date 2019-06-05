@@ -12,10 +12,7 @@ function transformOpts(result, item, key) {
   }
 }
 
-/**
- * 获取其他需要忽略的规则
- * @param cwd 当前目录
- */
+// 获取其他需要忽略的规则
 function getIgnores(cwd) {
   let ignores = [];
   // 获取 eslintignore 忽略规则
