@@ -19,12 +19,6 @@ module.exports = {
     default: false,
     alias: 'e',
   },
-  tslint: {
-    description: 'enable lint typescript',
-    boolean: true,
-    default: false,
-    alias: 't',
-  },
   stylelint: {
     description: 'enable lint style',
     boolean: true,

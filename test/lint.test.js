@@ -35,34 +35,13 @@ describe('test lint command', () => {
       .end(done);
   });
 
-  it('lint ts', done => {
-    coffee
-      .fork(umiLint, ['./ts', '--tslint'], { cwd })
-      // .debug()
-      .expect(
-        'stdout',
-        /Type declaration of 'any' loses type-safety. Consider replacing it with a more precise type/
-      )
-      .expect('stdout', /Calls to 'console.log' are not allowed/)
-      .expect('code', 2)
-      .end(done);
-  });
-
-  it('lint ts with sub options', done => {
-    coffee
-      .fork(umiLint, ['./ts', '--t', '--tslint.force'], { cwd })
-      // .debug()
-      .expect('code', 0)
-      .end(done);
-  });
-
   it('lint style', done => {
     coffee
       .fork(umiLint, ['./style', '--stylelint'], { cwd })
       // .debug()
       .expect(
         'stdout',
-        /✖  Unexpected missing generic font family   font-family-no-missing-generic-family-keyword/
+        /✖  Unexpected missing generic font family   font-family-no-missing-generic-family-keyword/,
       )
       .expect('code', 2)
       .end(done);
