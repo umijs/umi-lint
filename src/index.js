@@ -15,6 +15,9 @@ class MainCommand extends Command {
     this.eslint = resolveBin('eslint');
     this.stylelint = resolveBin('stylelint');
     this.prettier = resolveBin('prettier');
+    this.sortImports = resolveBin('import-sort-cli', {
+      executable: 'import-sort',
+    });
 
     this.usage = `
       Usage: umi-lint [options] file.js [file.js] [dir]
@@ -34,11 +37,11 @@ class MainCommand extends Command {
     }
   }
 
-  *lint({ _, eslint, stylelint, prettier, fix, quiet, cwd }) {
-    if (_.length === 0) {
-      console.log('please specify a path to lint');
-      return;
-    }
+  *lint({ _, eslint, stylelint, sortImports, prettier, fix, quiet, cwd }) {
+    // if (_.length === 0) {
+    //   console.log('please specify a path to lint');
+    //   return;
+    // }
 
     const commonOpts = [...(fix ? ['--fix'] : []), ...(quiet ? ['--quiet'] : [])];
 
@@ -64,7 +67,13 @@ class MainCommand extends Command {
           );
         }
       }
-
+      if (sortImports) {
+        jobs.push(
+          this.helper.forkNode(this.sortImports, ['--write', '**/*.{js,jsx,ts,tsx}'], {
+            cwd,
+          }),
+        );
+      }
       if (stylelint) {
         const files = allFiles.filter(item =>
           endsWithArray(item, ['.css', '.less', '.scss', '.sass']),
@@ -101,6 +110,7 @@ class MainCommand extends Command {
           );
         }
       }
+      console.log(jobs);
       yield Promise.all(jobs);
     } catch (error) {
       debug(error);

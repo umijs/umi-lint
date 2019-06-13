@@ -23,7 +23,8 @@
   "scripts": {
     "lint": "node ./bin/umi-lint --eslint bin/ src/",
     "precommit": "node ./bin/umi-lint --staged --eslint --prettier --fix",
-    "test": "umi-test"
+    "test": "umi-test",
+    "format-imports": "node ./bin/umi-lint --eslint --sortImports"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^1.4.2",
@@ -50,6 +51,11 @@
     "globby": "^9.0.0",
     "husky": "^0.14.3",
     "ignore": "^5.1.2",
+    "import-sort-cli": "^6.0.0",
+    "import-sort-parser-babylon": "^6.0.0",
+    "import-sort-parser-typescript": "^6.0.0",
+    "import-sort-style-eslint": "^6.0.0",
+    "import-sort-style-module": "^6.0.0",
     "lint-staged": "^8.1.4",
     "prettier": "^1.16.4",
     "resolve-bin": "^0.4.0",
