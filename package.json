@@ -1,6 +1,6 @@
 {
   "name": "umi-lint",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "configless lint tool all in one",
   "keywords": [
     "eslint",
