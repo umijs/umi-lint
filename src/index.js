@@ -119,19 +119,19 @@ class MainCommand extends Command {
     const lintstagedrc = {
       ...(prettier && {
         '*.{js,jsx,ts,tsx,less,scss,sass,css}': [
-          `prettier --write ${parseSubOptions(prettier).join(' ')}`,
+          `${this.prettier} --write ${parseSubOptions(prettier).join(' ')}`,
           'git add',
         ],
       }),
       ...(eslint && {
         [`*{${eslintExtensions.join(',')}}`]: [
-          `eslint ${commonOpts} ${parseSubOptions(eslint).join(' ')}`,
+          `${this.eslint} ${commonOpts} ${parseSubOptions(eslint).join(' ')}`,
           'git add',
         ],
       }),
       ...(stylelint && {
         '*.{less,scss,sass,css}': [
-          `stylelint ${commonOpts} ${parseSubOptions(stylelint).join(' ')}`,
+          `${this.stylelint} ${commonOpts} ${parseSubOptions(stylelint).join(' ')}`,
           'git add',
         ],
       }),
